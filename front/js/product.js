@@ -56,13 +56,12 @@ fetch(urlAPI+"/"+id)
         </div>
       </article>`;
       curentArticle.innerHTML += htmlArticle;
-
       // Action ajouter au panier 
         let bouton = document.querySelector('#addToCart');
         bouton.addEventListener("click", () => {
         let nombreObjetCommande = document.querySelector("#quantity").value;
-        checkColor();
-        checkQuantity(nombreObjetCommande);
+        if (!checkColor()) return;
+        if (!checkQuantity(nombreObjetCommande)) return;
 
 
         let commande = {
@@ -75,12 +74,6 @@ fetch(urlAPI+"/"+id)
         }
 
         localStorageInfo(commande);
-
-
-        //console.log(commande.quantity);
-        //console.log(commande.color);
-        //console.log(commande.id);
-
         //localStorage.setItem("panierUtilisateur", JSON.stringify(commande));     //stock l'objet dans le local storage et (transforme/remet l'objet data en string au format JSON)
         console.log("Rapport contenu localStorage", JSON.parse(localStorage.getItem("panierUtilisateur")));      // récupère l'information au format JSON et "parse" retransforme le string JSON en objet  PRESQUE^^
 
@@ -93,8 +86,9 @@ function checkQuantity(qte) {
     alert("La valeur doit être comprise entre 0 et 100");
     document.querySelector("#quantity").value = 1;
     // on remet la valeur dans la plage autorisée
-    return;
-  }
+    return false;
+  } 
+  return true;
 }
 
 //Fonction check color
@@ -102,8 +96,9 @@ function checkColor() {
   let color = document.querySelector("#colors").value;
   if (color === "" || color === null) {
     alert("Veuillez choisir une couleur");
-    return;
-  }
+    return false;
+  } 
+  return true;
 }
 
 //---------------------------------------------
@@ -112,7 +107,7 @@ function checkColor() {
 //Fonction edition localStorage
 function localStorageInfo (commande) {
     let currentLocalStorage = JSON.parse(localStorage.getItem("panierUtilisateur")) || [];
-    let infoEnCours ;
+    let infoEnCours;
     console.log("Initital LocalStorage", currentLocalStorage);
     
     if (currentLocalStorage.length < 1) {   //vide Cas 1
@@ -120,7 +115,7 @@ function localStorageInfo (commande) {
       currentLocalStorage.push(commande);
     } else if (currentLocalStorage.length >= 1) {
       for (let i = 0; i < currentLocalStorage.length; i++) {
-        console.log("tour", i+1);
+        console.table("tour", i+1);
         if (currentLocalStorage[i].id == commande.id && currentLocalStorage[i].color == commande.color) {   //correspondance Cas 2
           console.log ("cas 2 Quantity")
           currentLocalStorage[i].quantity += parseInt(commande.quantity);
@@ -132,7 +127,7 @@ function localStorageInfo (commande) {
         }
       }
     }
-    if (infoEnCours != null) {
+    if (infoEnCours !== null) {
       currentLocalStorage.push(infoEnCours);
       }
 
