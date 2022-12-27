@@ -1,19 +1,18 @@
-const urlAPI = "http://localhost:3000/api/products";
-var items = document.querySelector("#items");
+const url = "http://localhost:3000/api/products";
+let items = document.querySelector("#items");
 
 // -------------
 
-fetch(urlAPI)
+fetch(url)
   .then(response => response.json())  
-  .then(kanaps => {
-    for (let kanap of kanaps)
-      {
+  .then(kanap => {
+    for (let i=0; i<kanap.length; i++) {
         items.innerHTML += `          
-        <a href="./product.html?id=${kanap._id}">
+        <a href="./product.html?id=${kanap[i]._id}">
             <article>
-              <img src="${kanap.imageUrl}" alt="${kanap.altTxt}">
-              <h3 class="productName">${kanap.name}</h3>
-              <p class="productDescription">${kanap.description}</p>
+              <img src="${kanap[i].imageUrl}" alt="${kanap[i].altTxt}">
+              <h3 class="productName">${kanap[i].name}</h3>
+              <p class="productDescription">${kanap[i].description}</p>
             </article>
         </a>
         `;
