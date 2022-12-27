@@ -4,7 +4,7 @@ let items = document.querySelector("#items");
 // -------------
 
 fetch(url)
-  .then(response => response.json())  
+  .then(res => res.json())  
   .then(kanap => {
     for (let i=0; i<kanap.length; i++) {
         items.innerHTML += `          
